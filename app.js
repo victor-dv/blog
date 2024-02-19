@@ -1,23 +1,26 @@
-//modules
-const express = require('express')
-const app = express()
+const express= require("express");
+const app = express();
 
-const feedRoutes = require('./routes/feedRoutes')
+const port = 8080;
+const feedRoutes = require("./routes/feedRoutes")
+const authRoutes = require("./routes/authRoutes")
 
-//Json parser do express 
-app.use(express.json())
+//Json parser do express - middleware para 'captar' os json do client!
+app.use(express.json());
 
-//Rotas app
-app.use("/feed", feedRoutes )
+//middleware para configurar o CORS
 
-//Configurando o cors
-app.use((req, res, next) =>{
-    res.setHeader('Acess-Control-Allow-Origin', '*')
-    res.setHeader('Acess-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE')
-    res.setHeader('Acess-Control-Allow-Origin', 'Content-type, Authorization')
-})
+app.use((req, res, next)=> {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
-const porta = 8000
-app.listen(porta, ()=>{
-    console.log("Server ta on porta: " + porta )
+//Rotas do app - Esse middleware vai captar todas as rotas criadas no feedRoutes
+app.use('/feed', feedRoutes)
+app.use('/auth', authRoutes)
+
+app.listen(port, ()=> {
+    console.log("Server online na porta: " + port)
 })
