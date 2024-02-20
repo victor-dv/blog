@@ -1,23 +1,24 @@
 const { validationResult } = require("express-validator");
-
+const Post = require('../models/post')
 
 exports.getPosts = (req, res, next) => {
-    res.status(200).json({
-        posts: [
-            {
-                title: "Primeiro post",
-                content: "Este é o meu primeiro post!"
-            }
-        ]
+    Post.find()
+    .then(result =>{
+        res.status(200).json({
+            posts : result
+        })
     })
+
 }
 
 exports.createPost = (req, res, next) => {
+  
+
 
     const errors = validationResult(req);
     console.log(errors);
 
-    if(!errors.isEmpty()) {
+    if (!errors.isEmpty()) {
         return res.status(422).send({
             error: true,
             message: errors.array()[0].msg
@@ -25,14 +26,26 @@ exports.createPost = (req, res, next) => {
     }
 
     const title = req.body.title;
-    const content = req.body.content;
+    const contents = req.body.content;
+    const imgUrl = req.body.imgUrl
+    
+    const postagem = new Post({
+        title: title,
+        contents: contents,
+        imgUrl: imgUrl
+    })
 
     //Add este post ao DB
+    postagem.save()
+        .then(result => {
+            console.log(result)
+            res.status(201).json({
+                error: false,
+                message: "Post criado com sucesso!!"
+            })
+        })
 
-    res.status(201).json({
-        error: false,
-        message: "Post criado com sucesso!!"
-    })
+
 }
 
 //Rotas para atualizar e deletar um post

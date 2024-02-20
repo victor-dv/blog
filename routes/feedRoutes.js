@@ -1,13 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../controllers/authController");
-const { validateEmail, validateName, validatePassword } = require("../services/validators");
+const feedController = require("../controllers/feedController");
+const { check, body } = require("express-validator");
+const { validateEmail, validateTitle } = require("../services/validators");
 
-router.post('/signup',[validateEmail, validateName, validatePassword], auth.signUpUser);
-router.post('/signin',[validateEmail, validatePassword], auth.signUpUser);
+//Criar as rotas relacionadas ao feed
+
+router.get('/posts', feedController.getPosts);
 
 
 
+
+//Validar as informações
+router.post('/post',
+    [
+        validateEmail,
+        validateTitle
+    ]
+    ,
+    feedController.createPost);
+
+
+router.patch("/post/:postID", feedController.updatePost);
+router.delete("/post/:postID", feedController.deletePost);
 
 module.exports = router;

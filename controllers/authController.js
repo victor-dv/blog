@@ -1,4 +1,5 @@
-const { validationResult } = require("express-validator");
+const { validationResult, Result } = require("express-validator");
+const User = require('../models/user')
 
 exports.signUpUser = (req, res, next) => {
 
@@ -17,11 +18,22 @@ exports.signUpUser = (req, res, next) => {
     const password = req.body.password;
     
     //Add este post ao DB
+    const creator = new User({
+        user: {name: name, email: email, password: password }
+        
 
-    res.status(201).json({
-        error: false,
-        message: "User criado com sucesso!!"
     })
+    creator.save()
+    .then(result =>{
+        console.log(result)
+        res.status(201).json({
+            error: false,
+            message: "User criado com sucesso!!"
+        })
+    })
+
+
+   
 }
 exports.signInUser = (req, res, next) => {
 

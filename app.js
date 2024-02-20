@@ -1,4 +1,5 @@
-const express= require("express");
+const express = require("express");
+const mongoose = require('mongoose')
 const app = express();
 
 const port = 8080;
@@ -10,7 +11,7 @@ app.use(express.json());
 
 //middleware para configurar o CORS
 
-app.use((req, res, next)=> {
+app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -21,6 +22,10 @@ app.use((req, res, next)=> {
 app.use('/feed', feedRoutes)
 app.use('/auth', authRoutes)
 
-app.listen(port, ()=> {
-    console.log("Server online na porta: " + port)
-})
+mongoose.connect("mongodb://localhost:27017")
+    .then(result => {
+
+        app.listen(port, () => {
+            console.log("Server online na porta: " + port)
+        })
+    })

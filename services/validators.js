@@ -4,12 +4,12 @@ module.exports = {
     validateEmail: check("email")
         .isEmail()
         .withMessage("Digite um email válido!")
-        .custom((value, { req }) => {
+        /* .custom((value, { req }) => {
             if (value === "juca@email.com") {
                 throw new Error("Email já consta no banco de dados!");
             }
             return true;
-        }),
+        }) */,
     validatePassword: check("password")
         .isLength({ min: 8 })
         .withMessage("A senha precisa de pelo menos 8 caracters!"),
