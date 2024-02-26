@@ -10,8 +10,6 @@ const { validateEmail, validateTitle } = require("../services/validators");
 router.get('/posts', feedController.getPosts);
 
 
-
-
 //Validar as informações
 router.post('/post',
     [

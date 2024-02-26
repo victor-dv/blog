@@ -7,15 +7,25 @@ exports.signUpUser = (req, res, next) => {
     console.log(errors);
 
     if(!errors.isEmpty()) {
-        return res.status(422).send({
+
+
+        const error = new Error ("Falha na validação")
+        error.statusCode = 422
+        error.data = errors.array()
+
+        throw errors;
+
+       /*  return res.status(422).send({
             error: true,
             message: errors.array()[0].msg
-        });
+        }); */
     }
 
     const email = req.body.email;
     const name = req.body.name;
     const password = req.body.password;
+
+    
     
     //Add este post ao DB
     const creator = new User({
@@ -28,7 +38,8 @@ exports.signUpUser = (req, res, next) => {
         console.log(result)
         res.status(201).json({
             error: false,
-            message: "User criado com sucesso!!"
+            message: "User criado com sucesso!!",
+            result: result
         })
     })
 

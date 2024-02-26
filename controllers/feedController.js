@@ -25,14 +25,20 @@ exports.createPost = (req, res, next) => {
         });
     }
 
+    if(!req.file){
+        const error = new Error("Não enviou imagem...")
+        error.statusCode = 442
+        throw error
+    }
+
     const title = req.body.title;
     const contents = req.body.content;
-    const imgUrl = req.body.imgUrl
+    const image = req.file.path
     
     const postagem = new Post({
         title: title,
         contents: contents,
-        imgUrl: imgUrl
+        image: image
     })
 
     //Add este post ao DB
